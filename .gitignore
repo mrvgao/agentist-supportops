@@ -1,0 +1,11 @@
+.env
+.env.*
+!.env.example
+node_modules/
+.supabase/
+supabase/.temp/
+supabase/.branches/
+test-results/
+course/qa/
+.vercel/
+*.log

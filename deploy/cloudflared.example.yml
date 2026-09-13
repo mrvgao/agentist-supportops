@@ -1,0 +1,8 @@
+# Substitute your new tunnel UUID and host credentials file. No shared course keys.
+tunnel: YOUR_TUNNEL_UUID
+credentials-file: /etc/cloudflared/YOUR_TUNNEL_UUID.json
+ingress:
+  - hostname: inference.YOUR_COURSE_DOMAIN
+    service: http://127.0.0.1:8000
+  - service: http_status:404
+# Add an Access Service Auth policy before routing cloud worker traffic here.

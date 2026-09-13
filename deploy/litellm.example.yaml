@@ -1,0 +1,16 @@
+# Optional extension. Install and pin LiteLLM separately before running.
+# MODEL_BASE_URL then points at this proxy; keep the same application model alias.
+model_list:
+  - model_name: support-agent
+    litellm_params:
+      model: openai/support-agent
+      api_base: os.environ/SELF_HOSTED_BASE_URL
+      api_key: os.environ/SELF_HOSTED_API_KEY
+  - model_name: support-backup
+    litellm_params:
+      model: openai/gpt-4.1-mini
+      api_key: os.environ/OPENAI_API_KEY
+# Intentionally no automatic fallback: external forwarding requires data policy.
+# For synthetic classroom data only, add router_settings.fallbacks after testing.
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY

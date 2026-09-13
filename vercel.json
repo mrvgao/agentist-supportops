@@ -1,0 +1,1 @@
+{"version":2,"outputDirectory":"public","rewrites":[{"source":"/api/config","destination":"/api/config.mjs"},{"source":"/api/tickets","destination":"/api/tickets.mjs"}]}
