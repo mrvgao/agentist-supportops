@@ -1,0 +1,54 @@
+{
+  "boards": 12,
+  "scenes": [
+    {
+      "name": "01 · 从一张工单看完整系统",
+      "elements": 28
+    },
+    {
+      "name": "02 · 让 Code Agent 获得平台能力",
+      "elements": 25
+    },
+    {
+      "name": "03 · GitHub 与 Supabase：先让数据有家",
+      "elements": 22
+    },
+    {
+      "name": "04 · Vercel：从仓库到可访问应用",
+      "elements": 28
+    },
+    {
+      "name": "05 · Cloudflare 与支付边界",
+      "elements": 25
+    },
+    {
+      "name": "06 · Render 与 Daytona：让任务继续运行",
+      "elements": 22
+    },
+    {
+      "name": "07 · Agentic DevOps：先让测试变红",
+      "elements": 27
+    },
+    {
+      "name": "08 · Agentic DevOps：从绿灯到发布",
+      "elements": 30
+    },
+    {
+      "name": "09 · Lambda + vLLM：把模型服务接进来",
+      "elements": 25
+    },
+    {
+      "name": "10 · Token 治理：谁可以花多少",
+      "elements": 27
+    },
+    {
+      "name": "11 · 模型网关与生态选型",
+      "elements": 22
+    },
+    {
+      "name": "12 · 交付一套可以维护的系统",
+      "elements": 13
+    }
+  ],
+  "persisted": true
+}

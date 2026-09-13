@@ -12,7 +12,7 @@ styles={
  'sub':ParagraphStyle('sub',fontName='STSong-Light',fontSize=11,leading=18,textColor=HexColor('#51636d'),spaceAfter=14),
  'body':ParagraphStyle('body',fontName='STSong-Light',fontSize=11,leading=18,spaceAfter=10),
  'label':ParagraphStyle('label',fontName='STSong-Light',fontSize=13,leading=20,textColor=HexColor('#234bc4'),spaceBefore=10,spaceAfter=7),
- 'code':ParagraphStyle('code',fontName='Courier',fontSize=8,leading=12,spaceAfter=12),
+ 'code':ParagraphStyle('code',fontName='STSong-Light',fontSize=8,leading=12,spaceAfter=12),
 }
 flow=[]
 def para(t,style='body'):return Paragraph(html.escape(t).replace('\n','<br/>'),styles[style])
@@ -24,10 +24,10 @@ flow +=[para('80–90 分钟休息。课前完成账号配置、模型下载和�
 for i,(title,time,body,diagram,steps,code,prompt,check,limit) in enumerate(chapters,1):
  flow +=[para(f'{i:02d}  {title}','h'),para(time,'sub'),para(body),para(diagram,'sub'),para('操作路径','label')]
  flow +=[para('• '+x) for x in steps]
- flow +=[para('给 Code Agent 的任务','label'),para(prompt),para('验证成功的证据','label'),para(check),para('边界与常见误区','label'),para(limit),PageBreak()]
+ flow +=[para('操作示例','label'),para(code,'code'),para('给 Code Agent 的任务','label'),para(prompt),para('验证成功的证据','label'),para(check),para('边界与常见误区','label'),para(limit),PageBreak()]
 flow +=[para('复现与验收','h'),para('代码仓库：github.com/mrvgao/agentist-supportops'),para('本地：npm ci → npm run check → npm test → npm run test:mutation。数据库集成：supabase start → node scripts/test-local-db.mjs。'),para('必过检查','label'),para('unit-and-mutation：代码检查、行为测试、变异检测。database-and-worker：真实 Auth、RLS、并发领取、过期租约、幂等完成、并发预算和重复结算。'),para('发布前','label'),para('核对 commit、预览链接、环境变量、数据库迁移与用户隔离。真实模型 smoke test 单独记录，不能由替身测试替代。'),para('资源清理','label'),para('Lambda：只释放本次创建的实例 id。Daytona：只删除本次测试沙箱。Render 与 Supabase：长期保留需明确负责人和预算。'),para('参考文档','label')]
 for t,u in [('GitHub PR 与必需检查','https://docs.github.com/en/pull-requests/reference/status-checks'),('Render 部署','https://render.com/docs/deploys'),('Supabase API key 与权限','https://supabase.com/docs/guides/getting-started/api-keys'),('vLLM 兼容接口','https://docs.vllm.ai/en/latest/serving/online_serving/openai_compatible_server/'),('Cloudflare Tunnel','https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/')]:flow +=[para(t),Paragraph(f'<link href="{u}">{u}</link>',ParagraphStyle('url',parent=styles['sub'],fontName='Helvetica',fontSize=8,leading=11))]
 def page(c,d):
- c.setStrokeColor(HexColor('#d6dfe3'));c.line(44,802,551,802);c.setFont('Helvetica',9);c.setFillColor(HexColor('#51636d'));c.drawString(44,815,'AGENTIST / SUPPORTOPS');c.drawRightString(551,25,str(d.page))
+ c.setTitle('SupportOps · 现代 Agent 技术栈');c.setAuthor('Agentist');c.setStrokeColor(HexColor('#d6dfe3'));c.line(44,802,551,802);c.setFont('Helvetica',9);c.setFillColor(HexColor('#51636d'));c.drawString(44,815,'AGENTIST / SUPPORTOPS');c.drawRightString(551,25,str(d.page))
 SimpleDocTemplate(str(P/'lecture-note.pdf'),pagesize=(595,842),rightMargin=44,leftMargin=44,topMargin=60,bottomMargin=48).build(flow,onFirstPage=page,onLaterPages=page)
 print('PDF generated')

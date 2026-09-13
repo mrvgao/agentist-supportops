@@ -1,0 +1,6 @@
+{
+  "id": "6e175ec3-aa50-4dd1-91b0-0bb4a84d826d",
+  "exitCode": 0,
+  "output": "v25.9.0\n✔ tool-driven agent gathers evidence before drafting (1.421178ms)\n✔ missing evidence cannot become a confident draft (0.304221ms)\n✔ fabricated citations are rejected (0.12309ms)\n✔ tenant identity cannot be supplied by model (0.164861ms)\n✔ unknown destructive tool is denied (0.779954ms)\n✔ tool loops have a hard turn limit (0.198801ms)\n✔ malformed output fails explicitly (0.162091ms)\n✔ budget refusal occurs before upstream request (0.974695ms)\n✔ timeout conservatively charges unknown consumption (0.423523ms)\n✔ successful response settles actual token usage (0.259321ms)\n✔ oversize input never enters reservation or model (0.15321ms)\nℹ tests 11\nℹ suites 0\nℹ pass 11\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 105.119557\nMutation killed: removing evidence gate fails the independent missing-evidence assertion.\n",
+  "date": "2026-09-13T00:34:44.667Z"
+}

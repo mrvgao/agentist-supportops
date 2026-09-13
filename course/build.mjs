@@ -1,5 +1,9 @@
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
-import {compileLecture} from '/Users/mgao/Documents/Parallight/parallight-lab/src/lib/compile-lecture.mjs';
+import {pathToFileURL} from 'node:url';
+import {resolve} from 'node:path';
+const platformRoot=process.env.PARALLIGHT_ROOT;
+if(!platformRoot)throw Error('Set PARALLIGHT_ROOT to your Parallight checkout to compile Course Studio slides');
+const {compileLecture}=await import(pathToFileURL(resolve(platformRoot,'parallight-lab/src/lib/compile-lecture.mjs')));
 const root=new URL('./',import.meta.url);const boards=JSON.parse(readFileSync(new URL('boards-content.json',root)));
 const compiled=compileLecture(readFileSync(new URL('lecture.md',root),'utf8'),{lectureId:'supportops-modern-stack'});
 let html=compiled.html;
@@ -7,9 +11,54 @@ let html=compiled.html;
 writeFileSync(new URL('slides.html',root),html);
 let serial=0;
 const base=(type,x,y,w,h)=>({id:`sops${String(++serial).padStart(8,'0')}`,type,x,y,width:w,height:h,angle:0,strokeColor:'#182b36',backgroundColor:'transparent',fillStyle:'solid',strokeWidth:1,strokeStyle:'solid',roughness:0,opacity:100,groupIds:[],frameId:null,roundness:null,seed:serial,version:1,versionNonce:serial,isDeleted:false,boundElements:null,updated:1,link:null,locked:false});
-const wrap=(s,n=34)=>s.split('\n').flatMap(line=>{const a=[];while(line.length>n){a.push(line.slice(0,n));line=line.slice(n);}a.push(line);return a;}).join('\n');
+const wrap=(s,n=34)=>s.split('\n').flatMap(line=>{
+ const lines=[];let current='',used=0;
+ for(const token of line.match(/[A-Za-z0-9_./:$<>=-]+|[^A-Za-z0-9_./:$<>=-]/gu)||[]){
+  const width=[...token].reduce((v,c)=>v+(c.charCodeAt(0)<256?0.55:1),0);
+  if(used+width>n&&current){lines.push(current.trimEnd());current='';used=0;}
+  current+=token;used+=width;
+ }
+ lines.push(current);return lines;
+}).join('\n');
 function text(s,x,y,w=700,size=22,color='#182b36') {const value=wrap(s,Math.floor(w/size));return {...base('text',x,y,w,value.split('\n').length*size*1.45),text:value,originalText:value,fontSize:size,fontFamily:2,textAlign:'left',verticalAlign:'top',containerId:null,autoResize:false,lineHeight:1.45,strokeColor:color};}
 function box(label,x,y,w,h,fill='#eef2f5') {return [{...base('rectangle',x,y,w,h),backgroundColor:fill},text(label,x+20,y+16,w-40,21)];}
+const mechanisms={
+ 6:`# Evidence gate: remove this check to see the test turn red.
+def validate(citations):
+    if not citations:
+        raise ValueError("missing_evidence")
+try:
+    validate([])
+except ValueError:
+    print("PASS: unsupported reply blocked")
+else:
+    raise AssertionError("unsupported reply accepted")`,
+ 7:`# Idempotent completion: the same ticket keeps one reply.
+replies = {}
+def complete(ticket, text):
+    return replies.setdefault(ticket, text)
+complete("ticket-1", "first draft")
+complete("ticket-1", "duplicate")
+assert len(replies) == 1
+assert replies["ticket-1"] == "first draft"
+print("PASS: one persisted reply")`,
+ 9:`# Budget reservation before calling a model.
+from threading import Lock
+from concurrent.futures import ThreadPoolExecutor
+lock = Lock()
+remaining = 100
+def reserve(amount):
+    global remaining
+    with lock:
+        if remaining < amount: return False
+        remaining -= amount
+        return True
+with ThreadPoolExecutor(2) as pool:
+    result = list(pool.map(reserve, [60, 60]))
+assert result.count(True) == 1
+assert remaining == 40
+print("PASS: budget cannot be overspent", result)`
+};
 const projects=boards.map((b,i)=>{
  const elements=[text(b.name,50,35,1300,38),text(b.time,50,110,1200,18,'#51636d'),text(b.body,50,160,1220,23)];
  const nodes=b.flow.split(' → ');let x=50;const width=Math.min(240,1250/nodes.length-30);
@@ -18,6 +67,7 @@ const projects=boards.map((b,i)=>{
  elements.push(...box('给 Code Agent 的任务\n\n'+b.prompt,740,505,570,220,'#e8eefb'));
  elements.push(...box('验收证据\n\n'+b.check,740,755,570,190));
  elements.push(text(b.code,50,900,630,18));elements.push(text('讨论：'+b.limit,50,1100,1250,21));
+ if(mechanisms[i]){elements.push(text('可运行机制实验 · 与真实数据库集成测试配合使用',50,1210,1250,24));elements.push({...base('embeddable',50,1270,1260,480),link:'codeblock://supportops-'+i,customData:{kind:'codeblock',language:'python',code:mechanisms[i]}});}
  return {id:`b${String(i+1).padStart(7,'0')}`,name:b.name,scene:{elements,appState:{viewBackgroundColor:'#ffffff'},files:{}}};
 });
 const payload={project:{id:'sops2026',name:'SupportOps · 现代 Agent 技术栈'},boards:projects,layout:'scoped',exportedAt:Date.now()};
