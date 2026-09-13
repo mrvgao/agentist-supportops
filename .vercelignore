@@ -1,0 +1,7 @@
+.env*
+course/
+_runtime/
+tests/
+integration/
+supabase/
+.git/

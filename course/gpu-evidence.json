@@ -1,0 +1,44 @@
+{
+  "date": "2026-09-13T00:52:25.164Z",
+  "instance_id": "bb91c225dec547e9a88b1c12d609ff90",
+  "gpu": "NVIDIA A10 24GB",
+  "vllm": "0.11.0",
+  "transformers": "4.57.1",
+  "model": "Qwen/Qwen2.5-7B-Instruct",
+  "max_model_len": 12288,
+  "transport": "SSH tunnel to localhost-only authenticated vLLM",
+  "scope": "Real runAgent and real model; fixture ticket and lookup, no production DB worker",
+  "calls": [
+    {
+      "usage": {
+        "prompt_tokens": 145,
+        "total_tokens": 162,
+        "completion_tokens": 17,
+        "prompt_tokens_details": null
+      },
+      "latency_ms": 2786,
+      "action": "search_help"
+    },
+    {
+      "usage": {
+        "prompt_tokens": 211,
+        "total_tokens": 274,
+        "completion_tokens": 63,
+        "prompt_tokens_details": null
+      },
+      "latency_ms": 2265,
+      "action": "draft_reply"
+    }
+  ],
+  "result": {
+    "status": "draft",
+    "text": "您好！如果您忘记了登录密码，可以访问登录页面并使用页面上的密码重置功能来重置您的密码。请勿在工单中直接提供密码信息。如有其他问题，欢迎继续咨询。",
+    "citations": [
+      "login-reset"
+    ]
+  },
+  "released": true,
+  "termination_requested": true,
+  "total_tokens": 436,
+  "release_verification": "Owned instance absent from Lambda instances list after terminate request"
+}
