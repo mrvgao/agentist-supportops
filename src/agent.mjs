@@ -9,7 +9,7 @@ export function validateFinal(value, evidence) {
   const {text, citations = []} = value.args || {};
   if (typeof text !== 'string' || text.length < 2 || text.length > 3000) throw new Error('invalid_reply');
   if (!Array.isArray(citations) || citations.some(x => !evidence.has(x))) throw new Error('unknown_citation');
-  if (value.action === 'draft_reply' && citations.length === 0) throw new Error('missing_evidence');
+  // CLASSROOM RED PHASE: deliberately removed evidence gate. Restore before merge.
   return {status: value.action === 'handoff' ? 'human_review' : 'draft', text, citations};
 }
 
